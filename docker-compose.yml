@@ -1,0 +1,101 @@
+version: "3.9"
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  sql-data: 
+
+services:
+  db:
+     container_name: 'sqlserver'
+     image: "mcr.microsoft.com/mssql/server"
+     environment:
+        SA_PASSWORD: "Sina_Razavi123"
+        ACCEPT_EULA: "Y"
+     ports:
+       - "1433:1433"
+     volumes:
+       - sql-data:/var/lib/sqlserver/data
+     networks:
+       - my-network
+
+  consul:
+    image: "consul"
+    container_name: consul
+    ports:
+      - "8500:8500"
+    networks:
+      - my-network
+
+
+
+  api-gateway:
+    build: 
+      context: ./APIGateway
+      dockerfile: Dockerfile
+    image: api-gateway
+    container_name: api-gateway
+    ports:
+      - 9000:80
+    networks:
+      - my-network
+    depends_on:
+      - consul
+
+
+
+  Auth-service:
+    container_name: 'auth-service'
+    image : auth-service
+    build:
+      context: ./
+      dockerfile: DockerFileAuthService
+    ports:
+      - "5000:80"
+    networks:
+      - my-network
+    depends_on:
+      - consul
+      - db
+    
+  customer-service:
+    container_name: 'customer-service'
+    image : customer-service
+    build:
+      context: ./
+      dockerfile: DockerFileCustomerService
+    ports:
+      - "9001:80"
+    networks:
+      - my-network
+    depends_on:
+      - consul
+
+  product-service1:
+    container_name: 'product-service1'
+    image : product-service1
+    build:
+      context: ./
+      dockerfile: DockerFileProductService1
+    ports:
+      - "9002:80"
+    networks:
+      - my-network
+    depends_on:
+      - consul
+
+
+  product-service2:
+    container_name: 'product-service2'
+    image : product-service2
+    build:
+      context: ./
+      dockerfile: DockerFileProductService2
+    ports:
+      - "9003:80"
+    networks:
+      - my-network
+    depends_on:
+      - consul

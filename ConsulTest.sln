@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31410.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomersAPIServices", "CustomersAPIServices\CustomersAPIServices.csproj", "{F21DFB88-24C4-48BA-9BBB-2247DDE57DBE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsAPIServices", "ProductsAPIServices\ProductsAPIServices.csproj", "{6F9D4173-8990-442E-961F-B26A913CDC55}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIGateway", "APIGateway\APIGateway.csproj", "{1175891C-519A-4D1E-8507-880C5F987FA1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsAPIServices2", "ProductsAPIServices2\ProductsAPIServices2.csproj", "{B7AEA36C-7821-4A8B-A4F3-69CB98475E5F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthService", "AuthService\AuthService.csproj", "{6E23AF3D-27D7-4110-A4A0-49A0C1A1DBCE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker-compose", "docker-compose", "{4DE96FA1-091F-4090-8B82-5234D567D68F}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		DockerFileAuthService = DockerFileAuthService
+		DockerFileCustomerService = DockerFileCustomerService
+		DockerFileProductService1 = DockerFileProductService1
+		DockerFileProductService2 = DockerFileProductService2
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{7955A332-4DFD-49F5-A653-D4D609FC2A26}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F21DFB88-24C4-48BA-9BBB-2247DDE57DBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F21DFB88-24C4-48BA-9BBB-2247DDE57DBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F21DFB88-24C4-48BA-9BBB-2247DDE57DBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F21DFB88-24C4-48BA-9BBB-2247DDE57DBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F9D4173-8990-442E-961F-B26A913CDC55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F9D4173-8990-442E-961F-B26A913CDC55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F9D4173-8990-442E-961F-B26A913CDC55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F9D4173-8990-442E-961F-B26A913CDC55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1175891C-519A-4D1E-8507-880C5F987FA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1175891C-519A-4D1E-8507-880C5F987FA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1175891C-519A-4D1E-8507-880C5F987FA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1175891C-519A-4D1E-8507-880C5F987FA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7AEA36C-7821-4A8B-A4F3-69CB98475E5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7AEA36C-7821-4A8B-A4F3-69CB98475E5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7AEA36C-7821-4A8B-A4F3-69CB98475E5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7AEA36C-7821-4A8B-A4F3-69CB98475E5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E23AF3D-27D7-4110-A4A0-49A0C1A1DBCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E23AF3D-27D7-4110-A4A0-49A0C1A1DBCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E23AF3D-27D7-4110-A4A0-49A0C1A1DBCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E23AF3D-27D7-4110-A4A0-49A0C1A1DBCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7955A332-4DFD-49F5-A653-D4D609FC2A26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7955A332-4DFD-49F5-A653-D4D609FC2A26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7955A332-4DFD-49F5-A653-D4D609FC2A26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7955A332-4DFD-49F5-A653-D4D609FC2A26}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EC0518BA-1911-4A9D-A115-1B11FE6F5A36}
+	EndGlobalSection
+EndGlobal

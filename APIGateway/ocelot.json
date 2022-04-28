@@ -1,0 +1,83 @@
+﻿{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/account/login",
+      "DownstreamScheme": "http",
+      "ServiceName": "AuthService",
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "UpstreamPathTemplate": "/login",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/customers",
+      "DownstreamScheme": "http",
+      "ServiceName": "CustomerService",
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "UpstreamPathTemplate": "/customers",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Permission": "Customers/Get"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/customers/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "CustomerService",
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "UpstreamPathTemplate": "/customers/{everything}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/products/customer",
+      "DownstreamScheme": "http",
+      "ServiceName": "ProductService",
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "UpstreamPathTemplate": "/pro/customer",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/products",
+      "DownstreamScheme": "http",
+      "ServiceName": "ProductService",
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+        //"Type": "RoundRobin"
+      },
+      "UpstreamPathTemplate": "/products",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
+    }
+    //{
+    //  "DownstreamPathTemplate": "/api/products",
+    //  "DownstreamScheme": "http",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 9002
+    //    }
+    //  ],
+    //  "UpstreamPathTemplate": "/products",
+    //  "UpstreamHttpMethod": [ "Get" ]
+    //}
+  ],
+  "GlobalConfiguration": {
+    "UseServiceDiscovery": true,
+    "ServiceDiscoveryProvider": {
+      "Host": "consul",
+      "Port": 8500,
+      "Type": "PollConsul",
+      "PollingInterval": 100
+    }
+  }
+}
