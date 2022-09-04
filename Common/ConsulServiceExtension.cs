@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Sockets;
 using System.Net;
-using System.Net.WebSockets;
+using System.Net.NetworkInformation;
 using Consul;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -17,7 +18,7 @@ namespace Common
     {
         public static IServiceCollection AddConsulConfig(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig =>
+            services.AddSingleton<IConsulClient, ConsulClient>(_ => new ConsulClient(consulConfig =>
             {
                 var address = configuration.GetValue<string>("ConsulConfig:ConsulHost");
                 consulConfig.Address = new Uri(address);
@@ -31,25 +32,23 @@ namespace Common
             var logger = app.ApplicationServices.GetRequiredService<ILoggerFactory>().CreateLogger("AppExtensions");
             var lifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 
-            if (!(app.Properties["server.Features"] is FeatureCollection features))
+            if (!(app.Properties["server.Features"] is FeatureCollection))
             {
                 return app;
             }
 
 
             var servicePort = int.Parse(configuration.GetValue<string>("ConsulConfig:ServicePort"));
-       
-            var serviceIp = "192.168.43.152";
+            var serviceIp = "10.1.118.100";
             var serviceName = configuration.GetValue<string>("ConsulConfig:ServiceName");
             var serviceId = $"{serviceName}-{servicePort}";
 
 
-          
             var registration = new AgentServiceRegistration()
             {
-                ID = $"{serviceId}_{serviceName}_{servicePort}",
+                ID = serviceId,
                 Name = serviceName,
-                Address = serviceIp,
+                Address = serviceIp.ToString(),
                 Port = servicePort,
 
                 Check = new AgentCheckRegistration()
@@ -60,6 +59,7 @@ namespace Common
             };
 
             logger.LogInformation("Registering with Consul");
+            consulClient.Agent.ServiceDeregister(registration.ID).ConfigureAwait(true);
             consulClient.Agent.ServiceRegister(registration).ConfigureAwait(true);
 
             lifetime.ApplicationStopping.Register(() =>

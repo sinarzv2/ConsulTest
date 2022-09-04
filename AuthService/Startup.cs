@@ -147,7 +147,7 @@ namespace AuthService
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AuthService v1"));
             }
 
-            app.UseHttpsRedirection();
+          
             app.UseRouting();
 
             app.UseAuthentication();

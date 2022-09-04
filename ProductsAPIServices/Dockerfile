@@ -7,17 +7,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["CustomersAPIServices/CustomersAPIServices.csproj", "CustomersAPIServices/"]
+COPY ["ProductsAPIServices/ProductsAPIServices.csproj", "ProductsAPIServices/"]
 COPY ["Common/Common.csproj", "Common/"]
-RUN dotnet restore "CustomersAPIServices/CustomersAPIServices.csproj"
+RUN dotnet restore "ProductsAPIServices/ProductsAPIServices.csproj"
 COPY . .
-WORKDIR "/src/CustomersAPIServices"
-RUN dotnet build "CustomersAPIServices.csproj" -c Release -o /app/build
+WORKDIR "/src/ProductsAPIServices"
+RUN dotnet build "ProductsAPIServices.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "CustomersAPIServices.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "ProductsAPIServices.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "CustomersAPIServices.dll"]
+ENTRYPOINT ["dotnet", "ProductsAPIServices.dll"]

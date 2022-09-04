@@ -1,53 +1,25 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Ocelot.Cache.CacheManager;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Provider.Consul;
 
-namespace APIGateway
-{
-    public class Program
-    {
 
+var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
+    .AddJsonFile("ocelot.json")
+    .AddEnvironmentVariables();
 
-
-        public static void Main(string[] args)
-        {
-            new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    config
-                        .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
-                        .AddJsonFile("appsettings.json", true, true)
-                        .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true)
-                        .AddJsonFile("ocelot.json")
-                        .AddJsonFile($"ocelot.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true)
-                        .AddEnvironmentVariables();
-                })
-                .ConfigureServices(services => {
-                    services.AddAuthentication(option =>
+builder.Services.AddAuthentication(option =>
                     {
                         option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                         option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                         option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-
-
                     }).AddJwtBearer(options =>
                     {
                         var secretkey =
@@ -78,21 +50,7 @@ namespace APIGateway
                         options.SaveToken = true;
                         options.TokenValidationParameters = validationParameters;
                     });
-                    services.AddOcelot().AddConsul();
-                })
-                .ConfigureLogging((hostingContext, logging) =>
-                {
-                    //add your logging
-                })
-                .UseIISIntegration()
-                .Configure(app =>
-                {
-                    app.UseOcelot().Wait();
-                })
-                .Build()
-                .Run();
-        }
-
-        
-    }
-}
+builder.Services.AddOcelot().AddConsul();
+var app = builder.Build();
+app.UseOcelot().Wait();
+app.Run();
