@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace ProductsAPIServices.Controllers
@@ -22,7 +24,6 @@ namespace ProductsAPIServices.Controllers
         public IEnumerable<string> Get()
         {
             return new string[] {"Surface Book 2", "Mac Book Pro"};
-
         } 
         [HttpGet("customer")]
         public async Task<string> GetCustomer(int id)

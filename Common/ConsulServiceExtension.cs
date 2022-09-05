@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace Common
 {
@@ -37,36 +38,37 @@ namespace Common
                 return app;
             }
 
-
-            var servicePort = int.Parse(configuration.GetValue<string>("ConsulConfig:ServicePort"));
-            var serviceIp = "10.1.118.100";
+           
+            var serviceAddresses = configuration.GetSection("ConsulConfig:ServiceAddress").Get<IList<string>>();
             var serviceName = configuration.GetValue<string>("ConsulConfig:ServiceName");
-            var serviceId = $"{serviceName}-{servicePort}";
-
-
-            var registration = new AgentServiceRegistration()
+            foreach (var address in serviceAddresses)
             {
-                ID = serviceId,
-                Name = serviceName,
-                Address = serviceIp.ToString(),
-                Port = servicePort,
-
-                Check = new AgentCheckRegistration()
+                var split = address.Split(":");
+                var serviceIp = split[0];
+                var servicePort = int.Parse(split[1]);
+                var serviceId = $"{serviceName}-{servicePort}";
+                var registration = new AgentServiceRegistration()
                 {
-                    HTTP = $"http://{serviceIp}:{servicePort}/health",
-                    Interval = TimeSpan.FromSeconds(10)
-                }
-            };
+                    ID = serviceId,
+                    Name = serviceName,
+                    Address = serviceIp,
+                    Port = servicePort,
 
-            logger.LogInformation("Registering with Consul");
-            consulClient.Agent.ServiceDeregister(registration.ID).ConfigureAwait(true);
-            consulClient.Agent.ServiceRegister(registration).ConfigureAwait(true);
+                    Check = new AgentCheckRegistration()
+                    {
+                        HTTP = $"http://{serviceIp}:{servicePort}/health",
+                        Interval = TimeSpan.FromSeconds(10)
+                    }
+                };
 
-            lifetime.ApplicationStopping.Register(() =>
-            {
-                logger.LogInformation("Unregistering from Consul");
-                consulClient.Agent.ServiceDeregister(registration.ID).ConfigureAwait(true);
-            });
+                consulClient.Agent.ServiceRegister(registration).ConfigureAwait(true);
+
+                lifetime.ApplicationStopping.Register(() =>
+                {
+                    consulClient.Agent.ServiceDeregister(registration.ID).ConfigureAwait(true);
+                });
+            }
+          
 
             return app;
 

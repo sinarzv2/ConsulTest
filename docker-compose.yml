@@ -60,41 +60,70 @@ services:
 
   customersapiservices:
     image: ${DOCKER_REGISTRY-}customersapiservices
-    container_name: 'customer-service'
+    container_name: 'customer-instance1'
     build:
       context: .
       dockerfile: CustomersAPIServices/Dockerfile
     ports:
       - 1000:80
-      - 1001:443
+      - 1100:443
     networks:
       - my-network
     depends_on:
       - consul
 
+  customersapiservices2:
+    image: ${DOCKER_REGISTRY-}customersapiservices
+    container_name: 'customer-instance2'
+    build:
+      context: .
+      dockerfile: CustomersAPIServices/Dockerfile
+    ports:
+      - 1001:80
+      - 1101:443
+    networks:
+      - my-network
+    depends_on:
+      - consul
+
+
   productsapiservices:
     image: ${DOCKER_REGISTRY-}productsapiservices
-    container_name: 'product-service1'
+    container_name: 'product-instance1'
     build:
       context: .
       dockerfile: ProductsAPIServices/Dockerfile
     ports:
       - 2000:80
-      - 2001:443
+      - 2100:443
     networks:
       - my-network
     depends_on:
       - consul
 
   productsapiservices2:
-    image: ${DOCKER_REGISTRY-}productsapiservices2
-    container_name: 'product-service2'
+    image: ${DOCKER_REGISTRY-}productsapiservices
+    container_name: 'product-instance2'
     build:
       context: .
-      dockerfile: ProductsAPIServices2/Dockerfile
+      dockerfile: ProductsAPIServices/Dockerfile
     ports:
-      - 2010:80
-      - 2011:443
+      - 2001:80
+      - 2101:443
+    networks:
+      - my-network
+    depends_on:
+      - consul
+
+  productsapiservices3:
+    image: ${DOCKER_REGISTRY-}productsapiservices
+    container_name: 'product-instance3'
+    build:
+      context: .
+      dockerfile: ProductsAPIServices/Dockerfile
+    ports:
+      - 2002:80
+      - 2102:443
     networks:
       - my-network
     depends_on:
